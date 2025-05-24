@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "495047509570",
+    "project_id": "lasttry-a3479",
+    "storage_bucket": "lasttry-a3479.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495047509570:android:e8a962148ffded5c798fdb",
+        "android_client_info": {
+          "package_name": "com.example.firebasesetup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_eD2l_V4s5dAhLASnu_hvp_blDP6Kq3E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
