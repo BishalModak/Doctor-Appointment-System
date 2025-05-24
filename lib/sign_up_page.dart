@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'sign_in_page.dart';
-import 'sign_in_page.dart'; // or 'screens/sign_in_page.dart'
-
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -16,7 +13,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  final mobileController = TextEditingController();
+  final mobileController = TextEditingController(); // This data isn't saved to Firebase Auth directly
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
@@ -35,16 +32,21 @@ class _SignUpPageState extends State<SignUpPage> {
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
+        // You might want to save username and mobile to Firestore here
+        // For simplicity, we are just creating the user in Firebase Auth.
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Account created successfully')),
         );
-        Navigator.pop(context);
+        Navigator.pop(context); // Go back to sign in page
       } on FirebaseAuthException catch (e) {
         String errorMessage = 'Sign up failed';
         if (e.code == 'weak-password') {
           errorMessage = 'The password is too weak';
         } else if (e.code == 'email-already-in-use') {
           errorMessage = 'Email is already in use';
+        } else {
+          errorMessage = e.message ?? 'An unknown error occurred';
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorMessage)),
@@ -121,6 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: const InputDecoration(
                     hintText: 'Phone Number',
                     border: OutlineInputBorder(),
+                    helperText: 'Optional', // Added helper text as it's not stored in Firebase Auth directly
                   ),
                   keyboardType: TextInputType.phone,
                 ),
@@ -133,10 +136,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const SignInPage()),
-                          );
+                          Navigator.pop(context); // Go back to sign in page
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey,

@@ -1,30 +1,6 @@
-final Map<String, List<Map<String, String>>> diseaseDoctors = {
-  for (var disease in _diseaseNames)
-    disease: List.generate(50, (index) => {
-      'name': 'Dr. ${_doctorFirstNames[index % _doctorFirstNames.length]} ${_doctorLastNames[index % _doctorLastNames.length]}',
-      'info': '${_specializations[disease]} | Experience: ${3 + (index % 10)} years',
-    })
-};
-
-final List<String> _diseaseNames = [
-  'Heart', 'Kidney', 'Skin', 'Eye', 'Diabetes', 'Lungs', 'Neurology', 'Orthopedics',
-  'Gastroenterology', 'ENT', 'Dentistry', 'Psychiatry', 'Pediatrics', 'Oncology',
-  'Gynecology', 'Urology', 'Hematology', 'Infectious Diseases', 'Rheumatology',
-  'Endocrinology', 'Allergy & Immunology', 'General Surgery', 'Hepatology',
-  'Pathology', 'Radiology', 'Plastic Surgery', 'Dermatopathology', 'Anesthesiology',
-  'Pulmonology', 'Neonatology',
-];
-
-final List<String> _doctorFirstNames = [
-  'Ahmed', 'Fatima', 'Rahman', 'Nabila', 'Imran', 'Sarah', 'Latif', 'Rima', 'Shafiq',
-  'Nushrat', 'Karim', 'Mehreen', 'Tanveer', 'Saima', 'Rashed', 'Laila', 'Kamal',
-  'Mou', 'Zaman', 'Rukhsana'
-];
-
-final List<String> _doctorLastNames = [
-  'Khan', 'Hossain', 'Rahman', 'Begum', 'Ali', 'Hasan', 'Akter', 'Chowdhury',
-  'Siddique', 'Banu'
-];
+// mock_data.dart
+// This file will now primarily hold static data like specializations.
+// Doctor data will be fetched from Firestore.
 
 final Map<String, String> _specializations = {
   'Heart': 'Cardiologist',
@@ -58,3 +34,12 @@ final Map<String, String> _specializations = {
   'Pulmonology': 'Pulmonologist',
   'Neonatology': 'Neonatologist',
 };
+
+// Expose specializations for selection in the admin panel
+List<String> getAllSpecializations() {
+  return _specializations.keys.toList();
+}
+
+String getSpecializationName(String disease) {
+  return _specializations[disease] ?? 'General Practitioner';
+}

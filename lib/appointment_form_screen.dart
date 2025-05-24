@@ -24,23 +24,23 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Your Name'),
+                decoration: const InputDecoration(labelText: 'Your Name'),
                 onSaved: (val) => name = val ?? '',
                 validator: (val) => val!.isEmpty ? 'Enter name' : null,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Phone Number'),
+                decoration: const InputDecoration(labelText: 'Phone Number'),
                 onSaved: (val) => phone = val ?? '',
                 validator: (val) => val!.isEmpty ? 'Enter phone' : null,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Preferred Date'),
+                decoration: const InputDecoration(labelText: 'Preferred Date'),
                 onSaved: (val) => date = val ?? '',
                 validator: (val) => val!.isEmpty ? 'Enter date' : null,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
-                child: Text('Submit'),
+                child: const Text('Submit'),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
@@ -48,7 +48,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                       context: context,
                       builder:
                           (_) => AlertDialog(
-                        title: Text('Appointment Booked'),
+                        title: const Text('Appointment Booked'),
                         content: Text(
                           'Thank you $name. Your appointment with ${widget.doctorName} is confirmed.',
                         ),
@@ -59,7 +59,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                               context,
                                   (route) => route.isFirst,
                             ),
-                            child: Text('OK'),
+                            child: const Text('OK'),
                           ),
                         ],
                       ),

@@ -15,11 +15,11 @@ class DoctorDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(doctor['info']!, style: TextStyle(fontSize: 16)),
-            Spacer(),
+            Text(doctor['info']!, style: const TextStyle(fontSize: 16)),
+            const Spacer(),
             Center(
               child: ElevatedButton(
-                child: Text('Book Appointment'),
+                child: const Text('Book Appointment'),
                 onPressed: () {
                   Navigator.push(
                     context,

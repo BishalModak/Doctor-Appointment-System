@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'sign_up_page.dart';
-import 'disease_list_screen.dart'; // Make sure this is the correct path
+import 'disease_list_screen.dart';
+import 'admin_panel_screen.dart'; // New import for the admin panel
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -20,22 +21,32 @@ class _SignInPageState extends State<SignInPage> {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
 
-        // Navigate to disease list after successful login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => DiseaseListScreen()),
-        );
+        // Simple admin check: if the email is 'admin@example.com', navigate to admin panel
+        if (userCredential.user?.email == 'admin@example.com') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminPanelScreen()),
+          );
+        } else {
+          // Navigate to disease list for regular users
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => DiseaseListScreen()),
+          );
+        }
       } on FirebaseAuthException catch (e) {
         String errorMessage = 'Sign in failed';
         if (e.code == 'user-not-found') {
           errorMessage = 'No user found for that email';
         } else if (e.code == 'wrong-password') {
           errorMessage = 'Wrong password provided';
+        } else {
+          errorMessage = e.message ?? 'An unknown error occurred';
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorMessage)),
