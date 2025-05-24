@@ -28,11 +28,13 @@ class AdminPanelScreen extends StatelessWidget {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
+              // --- FIX IS HERE ---
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const SignInPage()),
-                    (route) => false,
+                MaterialPageRoute(builder: (context) => const SignInPage()), // Navigate to SignInPage
+                    (route) => false, // Remove all previous routes
               );
+              // --- END FIX ---
             },
           ),
         ],
