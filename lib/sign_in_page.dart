@@ -91,11 +91,12 @@ class _SignInPageState extends State<SignInPage> {
               children: [
                 // --- Welcome Title ---
                 const Text(
-                  'Welcome Back!',
+                  'Book My Doctor!',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.blue,
+
                   ),
                 ),
                 const SizedBox(height: 10),

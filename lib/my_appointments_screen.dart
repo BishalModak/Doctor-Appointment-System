@@ -18,7 +18,11 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
     // Check if a user is logged in
     if (currentUser == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('My Appointments')),
+        appBar: AppBar(
+          title: const Text('My Appointments'),
+          backgroundColor: Colors.blue, // Consistent AppBar color
+          foregroundColor: Colors.white, // Text color for AppBar title/icons
+        ),
         body: const Center(
           child: Padding(
             padding: EdgeInsets.all(16.0),
@@ -43,7 +47,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
         stream: FirebaseFirestore.instance
             .collection('appointments')
             .where('userId', isEqualTo: currentUser!.uid)
-            .orderBy('appointmentDateTime', descending: true)
+            .orderBy('appointmentDate', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -51,7 +55,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
           }
           if (snapshot.hasError) {
             print("Error fetching appointments: ${snapshot.error}"); // For debugging
-            return Center(child: Text('Error loading appointments.'));
+            return const Center(child: Text('Error loading appointments.'));
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
@@ -76,13 +80,18 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
               // Safely get data, providing 'N/A' if missing
               String doctorName = appointmentData['doctorName'] ?? 'Unknown Doctor';
               String specialization = appointmentData['specialization'] ?? 'N/A';
-              Timestamp? appointmentTimestamp = appointmentData['appointmentDateTime'] as Timestamp?;
 
-              // Format date and time
-              String appointmentTime = 'Date not set';
+              Timestamp? appointmentTimestamp = appointmentData['appointmentDate'] as Timestamp?;
+
+              // Format date, then append a fixed time
+              String displayString = 'Date not set';
               if (appointmentTimestamp != null) {
                 DateTime dateTime = appointmentTimestamp.toDate();
-                appointmentTime = DateFormat('yyyy-MM-dd – hh:mm a').format(dateTime);
+                String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+                // --- CHANGED THIS LINE: Concatenate fixed time ---
+                displayString = '$formattedDate - 09:00 AM'; // Example fixed time
+                // You can change "09:00 AM" to any fixed time you prefer, e.g., "10:30 AM"
+                // --- END CHANGE ---
               }
 
               return Card(
@@ -108,7 +117,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Time: $appointmentTime',
+                        'Time: $displayString', // Display the combined string
                         style: const TextStyle(fontSize: 15),
                       ),
                     ],

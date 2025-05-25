@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'sign_in_page.dart';
+import 'auth_wrapper.dart'; // Import the new AuthWrapper
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,14 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Firebase Auth Demo',
+      title: 'Doctor Appointment App', // Changed title for clarity
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignInPage(),
+      home: const AuthWrapper(), // <--- Use AuthWrapper here
       debugShowCheckedModeBanner: false,
     );
   }
 }
-

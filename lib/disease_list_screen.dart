@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'doctor_list_screen.dart';
-import 'admin_panel_screen.dart'; // Import the AdminPanelScreen
-import 'sign_in_page.dart'; // Import sign_in_page for logout navigation
-import 'my_appointments_screen.dart'; // Import the My Appointments Screen
+import 'admin_panel_screen.dart';
+import 'sign_in_page.dart';
+import 'my_appointments_screen.dart';
 
 class DiseaseListScreen extends StatefulWidget {
   const DiseaseListScreen({super.key});
@@ -16,7 +16,7 @@ class DiseaseListScreen extends StatefulWidget {
 class _DiseaseListScreenState extends State<DiseaseListScreen> {
   String _userName = 'Guest';
   String _userEmail = 'guest@example.com';
-  // Removed _userRole as we're not using it for conditional display here
+  String _userRole = 'user';
 
   @override
   void initState() {
@@ -24,7 +24,6 @@ class _DiseaseListScreenState extends State<DiseaseListScreen> {
     _loadUserData();
   }
 
-  // Function to load user data (name, email) from Firestore
   Future<void> _loadUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -39,25 +38,26 @@ class _DiseaseListScreenState extends State<DiseaseListScreen> {
           setState(() {
             _userName = data['username'] ?? 'User';
             _userEmail = data['email'] ?? user.email ?? 'No Email';
+            _userRole = data['role'] ?? 'user';
           });
         } else {
-          // If user document doesn't exist, use Firebase Auth email
           setState(() {
             _userEmail = user.email ?? 'No Email';
+            _userRole = 'user';
           });
         }
       } catch (e) {
         print("Error loading user data: $e");
-        // Fallback to Firebase Auth email if Firestore fetch fails
         setState(() {
           _userEmail = user.email ?? 'No Email';
+          _userRole = 'user';
         });
       }
     } else {
-      // User is not logged in
       setState(() {
         _userName = 'Guest';
         _userEmail = 'guest@example.com';
+        _userRole = 'guest';
       });
     }
   }
@@ -70,36 +70,36 @@ class _DiseaseListScreenState extends State<DiseaseListScreen> {
       ),
       drawer: Drawer(
         child: ListView(
-          padding: EdgeInsets.zero, // Remove default ListView padding
+          padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
               decoration: const BoxDecoration(
-                color: Colors.blue, // Background color for the header
+                color: Colors.blue,
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start, // Align content to start
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
                     radius: 38,
-                    backgroundColor: Colors.white, // Background for the icon
+                    backgroundColor: Colors.white,
                     child: Icon(
-                      Icons.person, // Static "no photo" icon
+                      Icons.person,
                       size: 50,
                       color: Colors.blue[800],
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 4),
                   Text(
                     _userName,
                     style: const TextStyle(color: Colors.white, fontSize: 25),
-                    overflow: TextOverflow.ellipsis, // Ensures text truncates
-                    maxLines: 1, // Ensures text stays on a single line
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   Text(
                     _userEmail,
-                    style: const TextStyle(color: Colors.white70, fontSize: 15),
-                    overflow: TextOverflow.ellipsis, // Ensures text truncates
-                    maxLines: 1, // Ensures text stays on a single line
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ],
               ),
@@ -108,21 +108,20 @@ class _DiseaseListScreenState extends State<DiseaseListScreen> {
               title: const Text('Home'),
               leading: const Icon(Icons.home),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
-                // Add navigation logic for home if needed
+                Navigator.pop(context);
               },
             ),
             const Divider(
               thickness: 1,
               color: Colors.blue,
-              indent: 16, // Indent for better visual
+              indent: 16,
               endIndent: 16,
             ),
             ListTile(
               title: const Text('My Appointments'),
               leading: const Icon(Icons.calendar_today),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -137,55 +136,57 @@ class _DiseaseListScreenState extends State<DiseaseListScreen> {
               indent: 16,
               endIndent: 16,
             ),
-            // Always show Admin Panel link in Drawer
-            ListTile(
-              title: const Text('Admin Panel'),
-              leading: const Icon(Icons.admin_panel_settings),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AdminPanelScreen(),
-                  ),
-                );
-              },
-            ),
-            const Divider(
-              thickness: 1,
-              color: Colors.blue,
-              indent: 16,
-              endIndent: 16,
-            ),
-            // Always show Login as Admin button
-            ListTile(
-              title: const Text('Login as Admin'),
-              leading: const Icon(Icons.login),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignInPage()),
-                      (route) => false, // Remove all routes from the stack
-                );
-              },
-            ),
-            const Divider( // Add divider after the button
-              thickness: 1,
-              color: Colors.blue,
-              indent: 16,
-              endIndent: 16,
-            ),
+            if (_userRole == 'admin')
+              ListTile(
+                title: const Text('Admin Panel'),
+                leading: const Icon(Icons.admin_panel_settings),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdminPanelScreen(),
+                    ),
+                  );
+                },
+              ),
+            if (_userRole == 'admin')
+              const Divider(
+                thickness: 1,
+                color: Colors.blue,
+                indent: 16,
+                endIndent: 16,
+              ),
+            if (_userRole != 'admin')
+              ListTile(
+                title: const Text('Login as Admin'),
+                leading: const Icon(Icons.login),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SignInPage()),
+                        (route) => false,
+                  );
+                },
+              ),
+            if (_userRole != 'admin')
+              const Divider(
+                thickness: 1,
+                color: Colors.blue,
+                indent: 16,
+                endIndent: 16,
+              ),
             ListTile(
               title: const Text('Logout'),
               leading: const Icon(Icons.logout),
               onTap: () async {
-                Navigator.pop(context); // Close the drawer
+                Navigator.pop(context);
                 await FirebaseAuth.instance.signOut();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const SignInPage()),
-                      (route) => false, // Remove all routes from the stack
+                      (route) => false,
                 );
               },
             ),
@@ -220,26 +221,80 @@ class _DiseaseListScreenState extends State<DiseaseListScreen> {
                   return const Center(child: Text('No specializations found.'));
                 }
 
+                // --- START OF CHANGES FOR INTERACTIVITY ---
                 return ListView(
+                  padding: const EdgeInsets.all(8.0), // Add padding around the list
                   children: diseases.map((disease) {
-                    return ListTile(
-                      title: Text(disease),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DoctorListScreen(disease: disease),
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0), // Margin between cards
+                      elevation: 4.0, // Shadow for the card
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                      ),
+                      child: InkWell( // Makes the entire card tappable with a ripple effect
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DoctorListScreen(disease: disease),
+                          ),
+                        ),
+                        borderRadius: BorderRadius.circular(12.0), // Matches Card's border radius
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0), // Padding inside the card
+                          child: Row(
+                            children: [
+                              // You can add a relevant icon here. For now, a generic one.
+                              Icon(Icons.medical_services, color: Theme.of(context).primaryColor, size: 30),
+                              const SizedBox(width: 16.0),
+                              Expanded( // Use Expanded to prevent text overflow in Row
+                                child: Text(
+                                  disease,
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis, // Ensure text truncates if too long
+                                ),
+                              ),
+                              const Icon(Icons.arrow_forward_ios, color: Colors.grey), // Arrow indicator
+                            ],
+                          ),
                         ),
                       ),
                     );
                   }).toList(),
                 );
+                // --- END OF CHANGES FOR INTERACTIVITY ---
               },
             ),
           ),
-          // --- NEW: Admin Panel Button at the bottom of the body ---
-
-
-          // --- END NEW ---
+          if (_userRole == 'admin')
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdminPanelScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                  backgroundColor: Colors.teal,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 5,
+                ),
+                child: const Text(
+                  'Go to Admin Panel',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
         ],
       ),
     );
