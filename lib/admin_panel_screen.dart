@@ -60,7 +60,7 @@ class AdminPanelScreen extends StatelessWidget {
               final doctor = doctors[index];
               final doctorData = doctor.data() as Map<String, dynamic>;
               return Card(
-                margin: const EdgeInsets.all(8.0),
+                margin: const EdgeInsets.all(8),
                 child: ListTile(
                   title: Text(doctorData['name'] ?? 'N/A'),
                   subtitle: Text('${doctorData['specialization'] ?? 'N/A'} | ${doctorData['info'] ?? 'N/A'}'),
@@ -121,7 +121,9 @@ class AdminPanelScreen extends StatelessWidget {
                 const SnackBar(content: Text('Doctor deleted successfully!')),
               );
             },
-            child: const Text('Delete'),
+            child: const Text('Delete', style: TextStyle(
+              color: Colors.white,
+            ),),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
           ),
         ],

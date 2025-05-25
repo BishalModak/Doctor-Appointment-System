@@ -89,7 +89,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
                 DateTime dateTime = appointmentTimestamp.toDate();
                 String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
                 // --- CHANGED THIS LINE: Concatenate fixed time ---
-                displayString = '$formattedDate - 09:00 AM'; // Example fixed time
+                displayString = '$formattedDate - 04:30 PM'; // Example fixed time
                 // You can change "09:00 AM" to any fixed time you prefer, e.g., "10:30 AM"
                 // --- END CHANGE ---
               }

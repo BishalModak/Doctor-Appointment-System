@@ -124,7 +124,11 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.popUntil(context, ModalRoute.withName('/')); // Pop to home screen
+                  Navigator.popUntil(context, ModalRoute.withName('/'));// Pop to home screen
+                  Navigator.push( // Then push My Appointments screen
+                    context,
+                    MaterialPageRoute(builder: (context) =>  AppointmentFormScreen(doctorName: '${widget.doctorName}',)),
+                  );
                 },
                 child: const Text('OK'),
               ),
@@ -174,7 +178,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
-                  hintText: 'e.g., +1234567890',
+                  hintText: 'Enter phone number',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                   prefixIcon: const Icon(Icons.phone),
                 ),

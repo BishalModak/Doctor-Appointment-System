@@ -33,6 +33,7 @@ final Map<String, String> _specializations = {
   'Anesthesiology': 'Anesthesiologist',
   'Pulmonology': 'Pulmonologist',
   'Neonatology': 'Neonatologist',
+  'Cardiology': 'Cardiologist',
 };
 
 // Expose specializations for selection in the admin panel

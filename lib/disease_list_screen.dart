@@ -226,10 +226,10 @@ class _DiseaseListScreenState extends State<DiseaseListScreen> {
                   padding: const EdgeInsets.all(8.0), // Add padding around the list
                   children: diseases.map((disease) {
                     return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0), // Margin between cards
-                      elevation: 4.0, // Shadow for the card
+                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4), // Margin between cards
+                      elevation: 4, // Shadow for the card
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                        borderRadius: BorderRadius.circular(12), // Rounded corners
                       ),
                       child: InkWell( // Makes the entire card tappable with a ripple effect
                         onTap: () => Navigator.push(
@@ -238,9 +238,9 @@ class _DiseaseListScreenState extends State<DiseaseListScreen> {
                             builder: (context) => DoctorListScreen(disease: disease),
                           ),
                         ),
-                        borderRadius: BorderRadius.circular(12.0), // Matches Card's border radius
+                        borderRadius: BorderRadius.circular(12), // Matches Card's border radius
                         child: Padding(
-                          padding: const EdgeInsets.all(16.0), // Padding inside the card
+                          padding: const EdgeInsets.all(16), // Padding inside the card
                           child: Row(
                             children: [
                               // You can add a relevant icon here. For now, a generic one.
@@ -250,7 +250,7 @@ class _DiseaseListScreenState extends State<DiseaseListScreen> {
                                 child: Text(
                                   disease,
                                   style: const TextStyle(
-                                    fontSize: 18.0,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   overflow: TextOverflow.ellipsis, // Ensure text truncates if too long
