@@ -34,7 +34,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       context: context,
       initialDate: _selectedDate ?? DateTime.now(), // Set initial date
       firstDate: DateTime.now(), // Cannot select past dates
-      lastDate: DateTime.now().add(const Duration(days: 365 * 5)), // Allow 5 years into the future
+      lastDate: DateTime.now().add(const Duration(days: 30)), // Allow 5 years into the future
       helpText: 'Select Appointment Date',
       cancelText: 'Not Now',
       confirmText: 'Select',

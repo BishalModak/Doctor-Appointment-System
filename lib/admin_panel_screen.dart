@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'admin_doctor_form_screen.dart'; // New import
-import 'sign_in_page.dart'; // For logout
-
+import 'admin_doctor_form_screen.dart';
+import 'sign_in_page.dart';
 class AdminPanelScreen extends StatelessWidget {
   const AdminPanelScreen({super.key});
 
