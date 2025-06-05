@@ -8,7 +8,7 @@ class AppointmentFormScreen extends StatefulWidget {
   // Optional: Pass doctor's UID if you want to link appointments specifically to a doctor's profile
   // final String? doctorUid;
 
-  AppointmentFormScreen({required this.doctorName, super.key}); // Added super.key
+  AppointmentFormScreen({required this.doctorName, super.key});
 
   @override
   _AppointmentFormScreenState createState() => _AppointmentFormScreenState();
@@ -34,7 +34,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       context: context,
       initialDate: _selectedDate ?? DateTime.now(), // Set initial date
       firstDate: DateTime.now(), // Cannot select past dates
-      lastDate: DateTime.now().add(const Duration(days: 30)), // Allow 5 years into the future
+      lastDate: DateTime.now().add(const Duration(days: 365 * 5)), // Allow 5 years into the future
       helpText: 'Select Appointment Date',
       cancelText: 'Not Now',
       confirmText: 'Select',
@@ -100,12 +100,12 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
         });
 
         // Dismiss loading indicator
-        Navigator.pop(context);
+        Navigator.pop(context); // This pops the loading dialog
 
         // Show success dialog
         showDialog(
           context: context,
-          builder: (dialogContext) => AlertDialog(
+          builder: (dialogContext) => AlertDialog( // Renamed context to dialogContext for clarity
             title: const Text('Appointment Booked!'),
             content: Text(
               'Thank you $_name. Your appointment with ${widget.doctorName} on ${_dateController.text} is pending confirmation.',
@@ -113,22 +113,25 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
             actions: [
               TextButton(
                 onPressed: () {
-                  // Navigate to My Appointments screen, clear stack up to DiseaseListScreen
-                  Navigator.popUntil(context, ModalRoute.withName('/')); // Pop to home
-                  Navigator.push( // Then push My Appointments screen
-                    context,
+                  // First, dismiss the AlertDialog
+                  Navigator.of(dialogContext).pop(); // Pops the AlertDialog
+
+                  // Then, navigate to My Appointments screen, clearing the stack up to the home route.
+                  Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const MyAppointmentsScreen()),
+                        (Route<dynamic> route) => route.isFirst || route.settings.name == '/',
                   );
                 },
                 child: const Text('View My Appointments'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.popUntil(context, ModalRoute.withName('/'));// Pop to home screen
-                  Navigator.push( // Then push My Appointments screen
-                    context,
-                    MaterialPageRoute(builder: (context) =>  AppointmentFormScreen(doctorName: '${widget.doctorName}',)),
-                  );
+                  // 1. Dismiss the AlertDialog first (using the dialogContext provided to the builder)
+                  Navigator.of(dialogContext).pop();
+
+                  // 2. Then, pop all routes until the home screen ('/')
+                  // This makes sure you land back on a stable, expected page.
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
                 },
                 child: const Text('OK'),
               ),
