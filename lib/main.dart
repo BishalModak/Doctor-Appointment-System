@@ -1,3 +1,4 @@
+import 'package:firebasesetup/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const AuthWrapper(), // <--- Use AuthWrapper here
+      home: const Splashscreen(), // <--- Use AuthWrapper here
       debugShowCheckedModeBanner: false,
     );
   }
